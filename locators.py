@@ -13,7 +13,6 @@ class StellarBurgersLocators:
     REGISTER_NAME = (By.CSS_SELECTOR, 'input[name="name"]')
     # Локатор для поля ввода email
     REGISTER_EMAIL = (By.CSS_SELECTOR, 'input[name="name"]')
-  # Уточните, если email и name используют один name="name"
     # Локатор для поля ввода пароля
     REGISTER_PASSWORD = (By.CSS_SELECTOR, 'input[type="password"]')
     # Локатор для кнопки "Зарегистрироваться"
