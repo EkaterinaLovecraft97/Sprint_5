@@ -9,3 +9,8 @@ def driver():
     driver.implicitly_wait(10)  # Явное ожидание
     yield driver
     driver.quit()
+
+@pytest.fixture
+def open_registration_page(driver):
+    driver.get("https://stellarburgers.nomoreparties.site/register")
+    yield driver

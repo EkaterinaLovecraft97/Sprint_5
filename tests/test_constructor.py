@@ -1,30 +1,35 @@
-from selenium.webdriver.common.action_chains import ActionChains
+from locators import StellarBurgersLocators
+from conftest import driver
+
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from locators import StellarBurgersLocators
+from selenium.webdriver.common.by import By
+
+HOME_URL = "https://stellarburgers.nomoreparties.site/"
+
+def test_move_on_toppings_by_click(driver):
+    driver.get(HOME_URL)
+
+    driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_FILLINGS).click()
+    WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
+
+    assert 'tab_tab_type_current__2BEPc' in driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_FILLINGS).get_attribute("class")
 
 
-def test_constructor_sections(driver):
-    driver.get("https://stellarburgers.nomoreparties.site/")
+def test_move_on_sauces_by_click(driver):
+    driver.get(HOME_URL)
 
-    # Проверяем раздел "Булки"
-    buns_tab = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.CONSTRUCTOR_BUNS)
-    )
-    ActionChains(driver).move_to_element(buns_tab).click().perform()
-    assert "Булки" in driver.page_source
+    driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_SAUCES).click()
+    WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
 
-    # Проверяем раздел "Соусы"
-    sauces_tab = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.CONSTRUCTOR_SAUCES)
-    )
-    ActionChains(driver).move_to_element(sauces_tab).click().perform()
-    assert "Соусы" in driver.page_source
+    assert 'tab_tab_type_current__2BEPc' in driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_SAUCES).get_attribute("class")
 
-    # Проверяем раздел "Начинки"
-    fillings_tab = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.CONSTRUCTOR_FILLINGS)
-    )
-    ActionChains(driver).move_to_element(fillings_tab).click().perform()
-    assert "Начинки" in driver.page_source
 
+def test_move_on_buns_by_click(driver):
+    driver.get(HOME_URL)
+
+    driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_SAUCES).click()
+    WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
+    driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_BUNS).click()
+
+    assert 'tab_tab_type_current__2BEPc' in driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_BUNS).get_attribute("class")
