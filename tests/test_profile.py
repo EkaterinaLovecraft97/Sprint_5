@@ -1,149 +1,162 @@
 from locators import StellarBurgersLocators
 from conftest import driver
 import data_generator
-
+from urls import REGISTER_URL, LOGIN_URL, HOME_URL, PROFILE_URL
 
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from names import get_full_name
 
-LOGIN_URL = "https://stellarburgers.nomoreparties.site/login"
-HOME_URL = "https://stellarburgers.nomoreparties.site/"
-PROFILE_URL = "https://stellarburgers.nomoreparties.site/account/profile"
+class TestProfileStellarBurgers:
+    def test_open_account_on_click_account_button(driver):
+        driver.get(HOME_URL)
 
-def register_user(driver, name, email, password):
-    """Регистрация нового пользователя."""
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.SING_UP_BUTTON)
-    ).click()
+        # Генерация данных
+        email = data_generator.generate_email()
+        password = data_generator.generate_password()
+        name = get_full_name()
 
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located(StellarBurgersLocators.REGISTER_NAME)
-    ).send_keys(name)
+        driver.find_element(By.XPATH, StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
+        driver.find_element(By.XPATH, StellarBurgersLocators.SING_UP_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(REGISTER_URL))
+        # Заполнение имени
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_NAME).send_keys(name)
+        # Заполнение email
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_EMAIL).send_keys(email)
+        # Заполнение пароля
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_PASSWORD).send_keys(password)
+        # Нажатие кнопки "Зарегистрироваться"
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.REGISTER_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
 
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located(StellarBurgersLocators.REGISTER_EMAIL)
-    ).send_keys(email)
+        # Заполнение email
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.LOGIN_EMAIL).send_keys(email)
+        # Заполнение пароля
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.LOGIN_PASSWORD).send_keys(password)
+        # Нажатие кнопки "Войти"
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.BUTTON_LOGIN).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
+        # Проверка перехода в Личный кабинет
+        driver.find_element(By.XPATH, StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(PROFILE_URL))
 
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located(StellarBurgersLocators.REGISTER_PASSWORD)
-    ).send_keys(password)
-
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.REGISTER_BUTTON)
-    ).click()
-
-    WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
-
-
-def login_user(driver, email, password):
-    """Авторизация пользователя."""
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located(StellarBurgersLocators.LOGIN_EMAIL)
-    ).send_keys(email)
-
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located(StellarBurgersLocators.LOGIN_PASSWORD)
-    ).send_keys(password)
-
-    driver.find_element(By.CSS_SELECTOR, ".button_button__33qZ0").click()
+        assert driver.current_url == PROFILE_URL
 
 
-def test_open_account_on_click_account_button(driver):
-    driver.get(HOME_URL)
+    def test_open_constructor_on_click_constructor_button(driver):
+        driver.get(HOME_URL)
 
-    # Генерация данных
-    email = data_generator.generate_email()
-    password = data_generator.generate_password()
-    name = get_full_name()
+        # Генерация данных
+        email = data_generator.generate_email()
+        password = data_generator.generate_password()
+        name = get_full_name()
 
-    # Регистрация пользователя
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON)
-    ).click()
-    register_user(driver, name, email, password)
+        driver.find_element(By.XPATH, StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
+        driver.find_element(By.XPATH, StellarBurgersLocators.SING_UP_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(REGISTER_URL))
+        # Заполнение имени
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_NAME).send_keys(name)
+        # Заполнение email
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_EMAIL).send_keys(email)
+        # Заполнение пароля
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_PASSWORD).send_keys(password)
+        # Нажатие кнопки "Зарегистрироваться"
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.REGISTER_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
 
-    # Логин пользователя
-    login_user(driver, email, password)
+        # Заполнение email
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.LOGIN_EMAIL).send_keys(email)
+        # Заполнение пароля
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.LOGIN_PASSWORD).send_keys(password)
+        # Нажатие кнопки "Войти"
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.BUTTON_LOGIN).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
 
-    # Проверка перехода в Личный кабинет
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON)
-    ).click()
-    WebDriverWait(driver, 10).until(EC.url_to_be(PROFILE_URL))
+        # Переход в конструктор
+        driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
 
-    assert driver.current_url == PROFILE_URL
-
-
-def test_open_constructor_on_click_constructor_button(driver):
-    driver.get(HOME_URL)
-
-    # Генерация данных
-    email = data_generator.generate_email()
-    password = data_generator.generate_password()
-    name = get_full_name()
-
-    # Регистрация и вход
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON)
-    ).click()
-    register_user(driver, name, email, password)
-    login_user(driver, email, password)
-
-    # Переход в конструктор
-    driver.find_element(By.XPATH, StellarBurgersLocators.CONSTRUCTOR_BUTTON).click()
-    WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
-
-    assert driver.current_url == HOME_URL
+        assert driver.current_url == HOME_URL
 
 
-def test_open_constructor_on_click_logo_button(driver):
-    driver.get(HOME_URL)
+    def test_open_constructor_on_click_logo_button(driver):
+        driver.get(HOME_URL)
 
-    # Генерация данных
-    email = data_generator.generate_email()
-    password = data_generator.generate_password()
-    name = get_full_name()
+        # Генерация данных
+        email = data_generator.generate_email()
+        password = data_generator.generate_password()
+        name = get_full_name()
 
-    # Регистрация и вход
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON)
-    ).click()
-    register_user(driver, name, email, password)
-    login_user(driver, email, password)
+        # Регистрация и вход
+        driver.find_element(By.XPATH, StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
+        driver.find_element(By.XPATH, StellarBurgersLocators.SING_UP_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(REGISTER_URL))
+        # Заполнение имени
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_NAME).send_keys(name)
+        # Заполнение email
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_EMAIL).send_keys(email)
+        # Заполнение пароля
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_PASSWORD).send_keys(password)
+        # Нажатие кнопки "Зарегистрироваться"
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.REGISTER_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
 
-    # Нажатие на логотип
-    driver.find_element(By.XPATH, StellarBurgersLocators.LOGO).click()
-    WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
+        # Заполнение email
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.LOGIN_EMAIL).send_keys(email)
+        # Заполнение пароля
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.LOGIN_PASSWORD).send_keys(password)
+        # Нажатие кнопки "Войти"
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.BUTTON_LOGIN).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
 
-    assert driver.current_url == HOME_URL
+        # Нажатие на логотип
+        driver.find_element(By.XPATH, StellarBurgersLocators.LOGO).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
+
+        assert driver.current_url == HOME_URL
 
 
-def test_exit_from_account_on_click_exit_button(driver):
-    driver.get(HOME_URL)
+    def test_exit_from_account_on_click_exit_button(driver):
+        driver.get(HOME_URL)
 
-    # Генерация данных
-    email = data_generator.generate_email()
-    password = data_generator.generate_password()
-    name = get_full_name()
+        # Генерация данных
+        email = data_generator.generate_email()
+        password = data_generator.generate_password()
+        name = get_full_name()
 
-    # Регистрация и вход
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON)
-    ).click()
-    register_user(driver, name, email, password)
-    login_user(driver, email, password)
+        # Регистрация и вход
+        driver.find_element(By.XPATH, StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
+        driver.find_element(By.XPATH, StellarBurgersLocators.SING_UP_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(REGISTER_URL))
+        # Заполнение имени
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_NAME).send_keys(name)
+        # Заполнение email
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_EMAIL).send_keys(email)
+        # Заполнение пароля
+        driver.find_element(By.XPATH, StellarBurgersLocators.REGISTER_PASSWORD).send_keys(password)
+        # Нажатие кнопки "Зарегистрироваться"
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.REGISTER_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
 
-    # Нажатие кнопки "Личный кабинет"
-    WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable(StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON)
-    ).click()
+        # Заполнение email
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.LOGIN_EMAIL).send_keys(email)
+        # Заполнение пароля
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.LOGIN_PASSWORD).send_keys(password)
+        # Нажатие кнопки "Войти"
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.BUTTON_LOGIN).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(HOME_URL))
 
-    WebDriverWait(driver, 10).until(EC.url_to_be(PROFILE_URL))
+        # Нажатие кнопки "Личный кабинет"
+        driver.find_element(By.XPATH, StellarBurgersLocators.PERSONAL_ACCOUNT_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(PROFILE_URL))
 
-    # Выход из аккаунта
-    driver.find_element(By.CSS_SELECTOR, ".Account_button__14Yp3").click()
-    WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
+        # Выход из аккаунта
+        driver.find_element(By.CSS_SELECTOR, StellarBurgersLocators.EXIT_BUTTON).click()
+        WebDriverWait(driver, 10).until(EC.url_to_be(LOGIN_URL))
 
-    assert driver.current_url == LOGIN_URL
+        assert driver.current_url == LOGIN_URL
